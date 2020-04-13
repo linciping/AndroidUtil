@@ -19,10 +19,9 @@ public class MVPCodeWriter extends WriteCommandAction.Simple {
 
     @Override
     protected void run() throws Throwable {
-        PsiFile psiFile = psiDirectory.createFile("DemoActivity.java");
+        PsiClass psiClass= JavaDirectoryService.getInstance().createClass(psiDirectory,"DemoActivity");
+        PsiFile psiFile= (PsiFile) psiClass.getParent();
         PsiElementFactory psiElementFactory = JavaPsiFacade.getElementFactory(project);
-        PsiClass psiClass = psiElementFactory.createClass("DemoActivity");
-        psiFile.add(psiClass);
 
         JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
         styleManager.optimizeImports(psiFile);

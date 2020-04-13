@@ -9,3 +9,6 @@ Activity,Fragment实例方法创建，自动生成extra变量
 
 ### MVPHelper功能
 快速创建标准MVP模板
+
+### CopyRes2Project
+一个工具用于将drawable资源拷贝到Android项目

@@ -1,7 +1,17 @@
 package com.linciping.androidutil.util;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationGroup;
+import com.intellij.notification.NotificationType;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
+import com.intellij.util.Consumer;
 import com.linciping.androidutil.bean.MethodParam;
 import com.linciping.androidutil.view.StartActivityMethodDialog;
 
@@ -79,5 +89,29 @@ public class Util {
             methodParamList.add(methodParam);
         }
         return methodParamList;
+    }
+
+    public static void showErrorNotification(String message, Project project) {
+        NotificationGroup notificationGroup = new NotificationGroup("File Diff", NotificationDisplayType.TOOL_WINDOW, true);
+        Notification notification = notificationGroup.createNotification(message, NotificationType.ERROR);
+        notification.notify(project);
+    }
+
+    public static void showNotification(String message, Project project) {
+        NotificationGroup notificationGroup = new NotificationGroup("File Diff", NotificationDisplayType.TOOL_WINDOW, true);
+        Notification notification = notificationGroup.createNotification(message, NotificationType.INFORMATION);
+        notification.notify(project);
+    }
+
+    public static void showSelectSingleFile(Project project,String title,VirtualFile virtualFile, Consumer<VirtualFile> onFileSelectResult) {
+        FileChooserDescriptor fileChooserDescriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
+        fileChooserDescriptor.setTitle(title);
+        FileChooser.chooseFile(fileChooserDescriptor, project, virtualFile, onFileSelectResult);
+    }
+
+    public static void showSelectSingleFile(Project project,String title, Consumer<VirtualFile> onFileSelectResult) {
+        FileChooserDescriptor fileChooserDescriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
+        fileChooserDescriptor.setTitle(title);
+        FileChooser.chooseFile(fileChooserDescriptor, project, project.getProjectFile(), onFileSelectResult);
     }
 }
