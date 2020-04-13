@@ -1,0 +1,44 @@
+<idea-plugin>
+    <id>com.linciping.androidutil.AndroidUtil</id>
+    <name>AndroidUtil</name>
+    <version>1.0</version>
+    <vendor email="843852979@qq.com" url="http://www.linciping.com">林赐平</vendor>
+
+    <description><![CDATA[
+      这是一款Android工具聚合，主要包括几个功能<br>
+      <em>FindViewById功能，方便快速生成view代码</em>
+      <em>MVPHelper功能，快速创建标准MVP模板</em>
+      <em>IntentUtil，Activity,Fragment实例方法创建，自动生成extra变量(待开发)</em>
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="StartActivityMethod" class="com.linciping.androidutil.action.StartActivityMethodAction"
+                text="StartActivityMethod" description="一个用于创建StartActivity静态方法工具">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action id="FragmentNewInstance" class="com.linciping.androidutil.action.FragmentNewInstanceAction"
+                text="FragmentNewInstance" description="一个工具用于创建Fragment NewInstance方法">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+        <action id="MVPHelper" class="com.linciping.androidutil.action.MVPHelperAction" text="MVPHelper"
+                description="创建标准MVP模版">
+            <add-to-group group-id="EditorPopupMenu"/>
+            <add-to-group group-id="ProjectViewPopupMenu"/>
+            <add-to-group group-id="EditorTabPopupMenu"/>
+            <add-to-group group-id="ConsoleEditorPopupMenu"/>
+        </action>
+    </actions>
+
+</idea-plugin>
