@@ -3,34 +3,35 @@ package com.linciping.androidutil.writer;
 import com.intellij.codeInsight.actions.ReformatCodeProcessor;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiFile;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.search.EverythingGlobalScope;
 
 public abstract class BaseCodeWriter extends WriteCommandAction.Simple {
 
-    private Project mProject;
+    protected Project mProject;
     private PsiClass mClass;
     private PsiElementFactory mFactory;
-    protected PsiFile psiFile;
-
+    protected PsiJavaFile psiFile;
+    protected JavaCodeStyleManager javaCodeStyleManager;
 
     public BaseCodeWriter(PsiClass mClass, PsiFile psiFile) {
         super(mClass.getProject(),"");
         this.mProject = getProject();
         this.mClass = mClass;
         this.mFactory = JavaPsiFacade.getElementFactory(mProject);
-        this.psiFile = psiFile;
+        this.psiFile = (PsiJavaFile) psiFile;
     }
 
     @Override
     protected void run() throws Throwable {
+        javaCodeStyleManager = JavaCodeStyleManager.getInstance(mProject);
         buildCode(mClass,mFactory);
-        JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(mProject);
-        styleManager.optimizeImports(psiFile);
-        styleManager.shortenClassReferences(mClass);
+    }
+
+    protected void formatCode(){
+        javaCodeStyleManager.optimizeImports(psiFile);
+        javaCodeStyleManager.shortenClassReferences(mClass);
         new ReformatCodeProcessor(mProject, mClass.getContainingFile(), null, false).runWithoutProgress();
     }
 

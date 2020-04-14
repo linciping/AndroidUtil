@@ -53,8 +53,8 @@ public class FragmentNewInstanceAction extends BaseGenerateAction {
         startActivityMethodDialog.pack();
         startActivityMethodDialog.setCode(CodeUtil.createFragmentInstanceMethod(methodParamList, psiClass.getName()));
         startActivityMethodDialog.setOkActionListener(e1 -> {
-            new StartActivityMethodWriter(psiClass,psiJavaFile,startActivityMethodDialog.getCode()).execute();
-            startActivityMethodDialog.dispose();
+//            new StartActivityMethodWriter(psiClass,psiJavaFile,startActivityMethodDialog.getCode()).execute();
+//            startActivityMethodDialog.dispose();
         });
         startActivityMethodDialog.setLocationRelativeTo(WindowManager.getInstance().getFrame(e.getProject()));
         startActivityMethodDialog.setVisible(true);

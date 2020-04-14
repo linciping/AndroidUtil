@@ -3,6 +3,7 @@ package com.linciping.androidutil.writer;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.search.EverythingGlobalScope;
 import com.linciping.androidutil.bean.AndroidUtilComponent;
 import com.linciping.androidutil.bean.InstanceMethodBean;
 import com.linciping.androidutil.util.CheckUtil;
@@ -23,6 +24,19 @@ public class StartActivityMethodWriter extends BaseCodeWriter {
     protected void buildCode(PsiClass psiClass, PsiElementFactory psiElementFactory) {
         PsiMethod psiMethod = psiElementFactory.createMethodFromText(instanceMethodBean.getCode(), psiClass);
         psiClass.add(psiMethod);
+        PsiClass constantClass=constantJavaFile.getClasses()[0];
+        PsiClass contextClass = JavaPsiFacade.getInstance(mProject).findClass(
+                "android.app.Activity", new EverythingGlobalScope(mProject));
+        PsiClass intentClass = JavaPsiFacade.getInstance(mProject).findClass(
+                "android.app.Activity", new EverythingGlobalScope(mProject));
+        javaCodeStyleManager.addImport(psiFile,constantClass);
+        if (contextClass!=null){
+            javaCodeStyleManager.addImport(psiFile,contextClass);
+        }
+        if (intentClass!=null){
+            javaCodeStyleManager.addImport(psiFile,intentClass);
+        }
+        formatCode();
     }
 
     private void initConstantClass(Project project) {
