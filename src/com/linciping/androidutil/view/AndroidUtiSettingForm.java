@@ -1,7 +1,6 @@
 package com.linciping.androidutil.view;
 
-import com.intellij.openapi.vfs.VirtualFile;
-import com.linciping.androidutil.bean.SettingProjectResDirComponent;
+import com.linciping.androidutil.bean.AndroidUtilComponent;
 import com.linciping.androidutil.util.CheckUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,20 +14,29 @@ public class AndroidUtiSettingForm {
     private JTextField tvResDir;
     private JButton btnChooseResDir;
     private JCheckBox cbIsReflect;
+    private JTextField tvConstantClass;
+    private JButton btnChooseConstantClass;
 
-    public AndroidUtiSettingForm(SettingProjectResDirComponent settingProjectResDirComponent) {
-        if (CheckUtil.isStringNoEmpty(settingProjectResDirComponent.getResDirPath())){
-            tvResDir.setText(settingProjectResDirComponent.getResDirPath());
+    public AndroidUtiSettingForm(AndroidUtilComponent androidUtilComponent) {
+        if (CheckUtil.isStringNoEmpty(androidUtilComponent.getResDirPath())) {
+            tvResDir.setText(androidUtilComponent.getResDirPath());
         }
-        cbIsReflect.setSelected(settingProjectResDirComponent.isReflect());
+        if (CheckUtil.isStringNoEmpty(androidUtilComponent.getConstantClassPath())) {
+            tvConstantClass.setText(androidUtilComponent.getConstantClassPath());
+        }
+        cbIsReflect.setSelected(androidUtilComponent.isReflect());
     }
 
-    public void addChooseResDirAction(ActionListener actionListener){
+    public void addChooseResDirAction(ActionListener actionListener) {
         btnChooseResDir.addActionListener(actionListener);
     }
 
-    public void addReflectChangeListener(ChangeListener changeListener){
+    public void addReflectChangeListener(ChangeListener changeListener) {
         cbIsReflect.addChangeListener(changeListener);
+    }
+
+    public void addChooseConstantAction(ActionListener actionListener) {
+        btnChooseConstantClass.addActionListener(actionListener);
     }
 
     public JPanel getPlRoot() {
@@ -37,17 +45,29 @@ public class AndroidUtiSettingForm {
 
     @Nullable
     public String getResDir() {
-        if (tvResDir.getText()!=null&&!tvResDir.getText().isEmpty()){
+        if (tvResDir.getText() != null && !tvResDir.getText().isEmpty()) {
             return tvResDir.getText();
         }
         return null;
+    }
+
+    public void setResDir(String path) {
+        tvResDir.setText(path);
     }
 
     public boolean isReflect() {
         return cbIsReflect.isSelected();
     }
 
-    public void setResDir(String path) {
-        tvResDir.setText(path);
+    @Nullable
+    public String getConstantClassPath() {
+        if (tvConstantClass.getText() != null && !tvConstantClass.getText().isEmpty()) {
+            return tvConstantClass.getText();
+        }
+        return null;
+    }
+
+    public void setConstantClassPath(String path) {
+        tvConstantClass.setText(path);
     }
 }

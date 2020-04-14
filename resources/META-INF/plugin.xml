@@ -28,7 +28,7 @@
     <project-components>
         <component>
             <implementation-class>
-                com.linciping.androidutil.bean.SettingProjectResDirComponent
+                com.linciping.androidutil.bean.AndroidUtilComponent
             </implementation-class>
         </component>
     </project-components>
@@ -55,6 +55,11 @@
             <add-to-group group-id="ToolsMenu" anchor="last"/>
             <action class="com.linciping.androidutil.action.CopyRes2ProjectAction" text="CopyRes2Project"/>
         </group>
+
+        <action id="FindViewById" class="com.linciping.androidutil.action.FindViewByIdAction" text="FindViewById"
+                description="一个工具用于快速创建Android View代码">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
     </actions>
 
 </idea-plugin>

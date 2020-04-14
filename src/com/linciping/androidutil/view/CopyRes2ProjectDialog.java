@@ -7,7 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Consumer;
-import com.linciping.androidutil.bean.SettingProjectResDirComponent;
+import com.linciping.androidutil.bean.AndroidUtilComponent;
 import com.linciping.androidutil.dialog.BackgroundProgressWindow;
 import com.linciping.androidutil.util.CheckUtil;
 import com.linciping.androidutil.util.Util;
@@ -32,7 +32,7 @@ public class CopyRes2ProjectDialog extends JDialog {
 
     private Project project;
     private String projectPath = "";
-    private SettingProjectResDirComponent settingProjectResDirComponent;
+    private AndroidUtilComponent androidUtilComponent;
     private String hdpiDir, xhdpiDir, xxhdpiDir;
     private List<String> hdpiPaths = new ArrayList<>();
     private List<String> hdpiNames = new ArrayList<>();
@@ -44,7 +44,7 @@ public class CopyRes2ProjectDialog extends JDialog {
 
     public CopyRes2ProjectDialog(Project project) {
         this.project = project;
-        settingProjectResDirComponent = SettingProjectResDirComponent.getInstance(project);
+        androidUtilComponent = AndroidUtilComponent.getInstance(project);
         projectPath = project.getBasePath();
         hdpiDir = projectPath + File.separator + "app\\src\\main\\res" + File.separator + "drawable-hdpi";
         xhdpiDir = projectPath + File.separator + "app\\src\\main\\res" + File.separator + "drawable-xhdpi";
@@ -143,7 +143,7 @@ public class CopyRes2ProjectDialog extends JDialog {
     }
 
     private boolean isShowReflect() {
-        if (!settingProjectResDirComponent.isReflect()){
+        if (!androidUtilComponent.isReflect()) {
             return false;
         }
         int noEmptySize = 0;
@@ -323,12 +323,12 @@ public class CopyRes2ProjectDialog extends JDialog {
     private void showSelectSingleFile(String title, Consumer<List<VirtualFile>> onFileSelectResult) {
         FileChooserDescriptor fileChooserDescriptor = FileChooserDescriptorFactory.createMultipleFilesNoJarsDescriptor();
         fileChooserDescriptor.setTitle(title);
-        VirtualFile virtualFile=null;
-        if (CheckUtil.isStringNoEmpty(settingProjectResDirComponent.getResDirPath())){
-            File file=new File(settingProjectResDirComponent.getResDirPath());
-            virtualFile= LocalFileSystem.getInstance().findFileByIoFile(file);
-            if (virtualFile==null){
-                virtualFile= LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file);
+        VirtualFile virtualFile = null;
+        if (CheckUtil.isStringNoEmpty(androidUtilComponent.getResDirPath())) {
+            File file = new File(androidUtilComponent.getResDirPath());
+            virtualFile = LocalFileSystem.getInstance().findFileByIoFile(file);
+            if (virtualFile == null) {
+                virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file);
             }
         }
         if (virtualFile != null) {

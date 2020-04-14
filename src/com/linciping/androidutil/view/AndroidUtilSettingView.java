@@ -1,38 +1,31 @@
 package com.linciping.androidutil.view;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.linciping.androidutil.bean.SettingProjectResDirComponent;
+import com.linciping.androidutil.bean.AndroidUtilComponent;
 import com.linciping.androidutil.util.CheckUtil;
 import com.linciping.androidutil.util.Util;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.io.File;
 
 public class AndroidUtilSettingView implements Configurable {
 
-    private SettingProjectResDirComponent settingProjectResDirComponent;
-    private boolean isModified=false;
+    private AndroidUtilComponent androidUtilComponent;
+    private boolean isModified = false;
     private AndroidUtiSettingForm androidUtiSettingForm;
     private Project project;
     private VirtualFile virtualFile;
 
     public AndroidUtilSettingView(Project project) {
-        this.project=project;
-        settingProjectResDirComponent=SettingProjectResDirComponent.getInstance(project);
-        if (CheckUtil.isStringNoEmpty(settingProjectResDirComponent.getResDirPath())){
-            File file=new File(settingProjectResDirComponent.getResDirPath());
-            virtualFile= LocalFileSystem.getInstance().findFileByIoFile(file);
-            if (virtualFile==null){
-                virtualFile= LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file);
-            }
+        this.project = project;
+        androidUtilComponent = AndroidUtilComponent.getInstance(project);
+        if (CheckUtil.isStringNoEmpty(androidUtilComponent.getResDirPath())) {
+            virtualFile = Util.getVirtualFileByFile(androidUtilComponent.getResDirPath());
         }
-        androidUtiSettingForm=new AndroidUtiSettingForm(settingProjectResDirComponent);
+        androidUtiSettingForm = new AndroidUtiSettingForm(androidUtilComponent);
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -46,16 +39,26 @@ public class AndroidUtilSettingView implements Configurable {
     public JComponent createComponent() {
         androidUtiSettingForm.addChooseResDirAction(e -> {
             Util.showSelectSingleFile(project,"请选择默认资源目录", virtualFile,virtualFile -> {
-                if (virtualFile!=null){
-                    isModified=true;
+                if (virtualFile != null) {
+                    isModified = true;
                     androidUtiSettingForm.setResDir(virtualFile.getPath());
+                    androidUtilComponent.setResDirPath(virtualFile.getPath());
                 }
             });
         });
         androidUtiSettingForm.addReflectChangeListener(e -> {
-            isModified=true;
+            isModified = true;
             JCheckBox checkBox = (JCheckBox) e.getSource();
-            settingProjectResDirComponent.setReflect(checkBox.isSelected());
+            androidUtilComponent.setReflect(checkBox.isSelected());
+        });
+        androidUtiSettingForm.addChooseConstantAction(e -> {
+            Util.showSelectSingleClass(project, "请选择常量类", virtualFile -> {
+                if (virtualFile != null) {
+                    isModified = true;
+                    androidUtiSettingForm.setConstantClassPath(virtualFile.getPath());
+                    androidUtilComponent.setConstantClassPath(virtualFile.getPath());
+                }
+            });
         });
         return androidUtiSettingForm.getPlRoot();
     }
@@ -66,11 +69,14 @@ public class AndroidUtilSettingView implements Configurable {
     }
 
     @Override
-    public void apply() throws ConfigurationException {
-        if (androidUtiSettingForm.getResDir()!=null){
-            settingProjectResDirComponent.setResDirPath(androidUtiSettingForm.getResDir());
+    public void apply() {
+        if (androidUtiSettingForm.getResDir() != null) {
+            androidUtilComponent.setResDirPath(androidUtiSettingForm.getResDir());
         }
-        settingProjectResDirComponent.setReflect(androidUtiSettingForm.isReflect());
-        isModified=false;
+        if (CheckUtil.isStringNoEmpty(androidUtiSettingForm.getConstantClassPath())) {
+            androidUtilComponent.setConstantClassPath(androidUtiSettingForm.getConstantClassPath());
+        }
+        androidUtilComponent.setReflect(androidUtiSettingForm.isReflect());
+        isModified = false;
     }
 }

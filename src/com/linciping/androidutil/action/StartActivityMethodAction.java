@@ -8,9 +8,15 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.search.EverythingGlobalScope;
+import com.linciping.androidutil.bean.AndroidUtilComponent;
+import com.linciping.androidutil.bean.InstanceMethodBean;
 import com.linciping.androidutil.bean.MethodParam;
+import com.linciping.androidutil.util.CheckUtil;
 import com.linciping.androidutil.util.CodeUtil;
 import com.linciping.androidutil.util.Util;
 import com.linciping.androidutil.view.StartActivityMethodDialog;
@@ -29,6 +35,8 @@ public class StartActivityMethodAction extends BaseGenerateAction {
     private List<MethodParam> methodParamList;
     private DefaultTableModel tableModel;
     private StartActivityMethodDialog startActivityMethodDialog;
+    private InstanceMethodBean instanceMethodBean;
+    private String constantClassName;
 
     public StartActivityMethodAction() {
         super(null);
@@ -44,19 +52,30 @@ public class StartActivityMethodAction extends BaseGenerateAction {
         Editor editor = e.getData(PlatformDataKeys.EDITOR);
         assert editor != null;
         psiClass = getTargetClass(editor, psiJavaFile);
-        assert psiClass!=null;
-        Util.getMetParamList(psiClass);
+        assert psiClass != null;
+        methodParamList = Util.getMetParamList(psiClass);
+        constantClassName = getConstantClassName(e.getProject());
         startActivityMethodDialog = new StartActivityMethodDialog();
-        tableModel= Util.updateTable(methodParamList,startActivityMethodDialog, tableModelListener);
+        tableModel = Util.updateTable(methodParamList, startActivityMethodDialog, tableModelListener);
         startActivityMethodDialog.setTitle("StartActivityMethod");
         startActivityMethodDialog.pack();
-        startActivityMethodDialog.setCode(CodeUtil.createStartActivityMethod(methodParamList, psiClass.getName()));
+        instanceMethodBean = CodeUtil.createStartActivityMethod(methodParamList, psiClass.getName(), constantClassName);
+        startActivityMethodDialog.setCode(instanceMethodBean.getCode());
         startActivityMethodDialog.setOkActionListener(e1 -> {
-            new StartActivityMethodWriter(psiClass,psiJavaFile,startActivityMethodDialog.getCode()).execute();
+            new StartActivityMethodWriter(psiClass, psiJavaFile, instanceMethodBean).execute();
             startActivityMethodDialog.dispose();
         });
         startActivityMethodDialog.setLocationRelativeTo(WindowManager.getInstance().getFrame(e.getProject()));
         startActivityMethodDialog.setVisible(true);
+    }
+
+    private String getConstantClassName(Project project) {
+        AndroidUtilComponent androidUtilComponent = AndroidUtilComponent.getInstance(project);
+        if (CheckUtil.isStringNoEmpty(androidUtilComponent.getConstantClassPath())) {
+            return Util.getFileNameByPath(androidUtilComponent.getConstantClassPath());
+        } else {
+            return "IntentKey";
+        }
     }
 
     private TableModelListener tableModelListener = new TableModelListener() {
@@ -70,7 +89,8 @@ public class StartActivityMethodAction extends BaseGenerateAction {
             if (column == 0) {
                 Boolean isSelected = (Boolean) tableModel.getValueAt(row, column);
                 methodParamList.get(row).setSelected(isSelected);
-                startActivityMethodDialog.setCode(CodeUtil.createStartActivityMethod(methodParamList,psiClass.getName()));
+                instanceMethodBean = CodeUtil.createStartActivityMethod(methodParamList, psiClass.getName(), constantClassName);
+                startActivityMethodDialog.setCode(instanceMethodBean.getCode());
             }
         }
     };

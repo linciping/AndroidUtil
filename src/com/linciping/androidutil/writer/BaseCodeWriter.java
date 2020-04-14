@@ -14,7 +14,7 @@ public abstract class BaseCodeWriter extends WriteCommandAction.Simple {
     private Project mProject;
     private PsiClass mClass;
     private PsiElementFactory mFactory;
-    private PsiFile psiFile;
+    protected PsiFile psiFile;
 
 
     public BaseCodeWriter(PsiClass mClass, PsiFile psiFile) {
