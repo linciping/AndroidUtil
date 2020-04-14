@@ -8,6 +8,7 @@
       这是一款Android工具聚合，主要包括几个功能<br>
       <em>FindViewById功能，方便快速生成view代码</em>
       <em>MVPHelper功能，快速创建标准MVP模板</em>
+      <em>CopyRes2Project功能，一个工具用于将drawable资源拷贝到Android项目</em>
       <em>IntentUtil，Activity,Fragment实例方法创建，自动生成extra变量(待开发)</em>
     ]]></description>
 
@@ -20,7 +21,17 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <defaultProjectTypeProvider type="Java"/>
+        <projectConfigurable instance="com.linciping.androidutil.view.AndroidUtilSettingView"/>
     </extensions>
+
+    <project-components>
+        <component>
+            <implementation-class>
+                com.linciping.androidutil.bean.SettingProjectResDirComponent
+            </implementation-class>
+        </component>
+    </project-components>
 
     <actions>
         <!-- Add your actions here -->
@@ -39,6 +50,11 @@
             <add-to-group group-id="EditorTabPopupMenu"/>
             <add-to-group group-id="ConsoleEditorPopupMenu"/>
         </action>
+
+        <group id="CopyRes2Project" text="CopyRes2Project" description="一个工具用于将drawable资源拷贝到Android项目">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action class="com.linciping.androidutil.action.CopyRes2ProjectAction" text="CopyRes2Project"/>
+        </group>
     </actions>
 
 </idea-plugin>

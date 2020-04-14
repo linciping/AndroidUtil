@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.linciping.androidutil.writer.MVPCodeWriter;
@@ -12,14 +13,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class MVPHelperAction extends AnAction {
 
-    private PsiDirectory psiDirectory;
-
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        psiDirectory = (PsiDirectory) e.getData(LangDataKeys.PSI_ELEMENT);
+        PsiDirectory psiDirectory = (PsiDirectory) e.getData(LangDataKeys.PSI_ELEMENT);
         Project project = e.getProject();
         assert project != null;
-        new MVPCodeWriter(project,psiDirectory).execute();
+        new MVPCodeWriter(project, psiDirectory).execute();
     }
 
     @Override
