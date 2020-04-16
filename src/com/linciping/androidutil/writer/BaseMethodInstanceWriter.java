@@ -18,7 +18,7 @@ public abstract class BaseMethodInstanceWriter extends BaseCodeWriter {
     public BaseMethodInstanceWriter(PsiClass mClass, PsiFile psiFile, InstanceMethodBean instanceMethodBean) {
         super(mClass, psiFile);
         this.instanceMethodBean = instanceMethodBean;
-        initConstantClass(getProject());
+        initConstantClass(mProject);
     }
 
     @Override

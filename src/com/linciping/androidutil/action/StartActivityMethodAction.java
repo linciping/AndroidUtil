@@ -64,7 +64,7 @@ public class StartActivityMethodAction extends BaseGenerateAction {
         String code = instanceMethodBean.getInstanceMethodCode() + "\n\n" + instanceMethodBean.getExtraSettingValueMethodCode();
         startActivityMethodDialog.setCode(code);
         startActivityMethodDialog.setOkActionListener(e1 -> {
-            new StartActivityMethodWriter(psiClass, psiJavaFile, instanceMethodBean).execute();
+            Util.executeWriteCommand(new StartActivityMethodWriter(psiClass, psiJavaFile, instanceMethodBean));
             startActivityMethodDialog.dispose();
         });
         startActivityMethodDialog.setLocationRelativeTo(WindowManager.getInstance().getFrame(project));

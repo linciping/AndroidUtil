@@ -1,31 +1,27 @@
 package com.linciping.androidutil.writer;
 
 import com.intellij.codeInsight.actions.ReformatCodeProcessor;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 
-public abstract class BaseCodeWriter extends WriteCommandAction.Simple {
+public abstract class BaseCodeWriter extends BaseWriterRunnable {
 
-    protected Project mProject;
     private PsiClass mClass;
     private PsiElementFactory mFactory;
     protected PsiJavaFile psiFile;
     protected JavaCodeStyleManager javaCodeStyleManager;
 
     public BaseCodeWriter(PsiClass mClass, PsiFile psiFile) {
-        super(mClass.getProject(),"");
-        this.mProject = getProject();
+        super(mClass.getProject());
         this.mClass = mClass;
         this.mFactory = JavaPsiFacade.getElementFactory(mProject);
         this.psiFile = (PsiJavaFile) psiFile;
     }
 
     @Override
-    protected void run() throws Throwable {
+    public void run() {
         javaCodeStyleManager = JavaCodeStyleManager.getInstance(mProject);
-        buildCode(mClass,mFactory);
+        buildCode(mClass, mFactory);
     }
 
     protected void formatCode(){

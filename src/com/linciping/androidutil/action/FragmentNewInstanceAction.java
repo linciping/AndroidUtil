@@ -65,8 +65,7 @@ public class FragmentNewInstanceAction extends BaseGenerateAction {
         String code = instanceMethodBean.getInstanceMethodCode() + "\n\n" + instanceMethodBean.getExtraSettingValueMethodCode();
         startActivityMethodDialog.setCode(code);
         startActivityMethodDialog.setOkActionListener(e1 -> {
-            new FragmentNewInstanceWriter(psiClass, psiJavaFile, instanceMethodBean).execute();
-            startActivityMethodDialog.dispose();
+            Util.executeWriteCommand(new FragmentNewInstanceWriter(psiClass, psiJavaFile, instanceMethodBean));
         });
         startActivityMethodDialog.setLocationRelativeTo(WindowManager.getInstance().getFrame(e.getProject()));
         startActivityMethodDialog.setVisible(true);

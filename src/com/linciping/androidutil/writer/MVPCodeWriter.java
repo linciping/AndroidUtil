@@ -1,22 +1,10 @@
 package com.linciping.androidutil.writer;
 
-import com.intellij.codeInsight.actions.ReformatCodeProcessor;
-import com.intellij.ide.actions.NewActionGroup;
-import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.impl.file.PsiDirectoryFactory;
-import com.linciping.androidutil.bean.AndroidUtilComponent;
-import com.linciping.androidutil.util.CheckUtil;
-import com.linciping.androidutil.util.Util;
 
-public class MVPCodeWriter extends WriteCommandAction.Simple {
+public class MVPCodeWriter extends BaseWriterRunnable {
 
     private PsiDirectory psiDirectory;
     private Project project;
@@ -27,7 +15,7 @@ public class MVPCodeWriter extends WriteCommandAction.Simple {
     private String viewMethodName;
 
     public MVPCodeWriter(Project project, PsiDirectory psiDirectory, String activityClassName, String presenterClassName, String viewClassName, String presenterMethodName, String viewMethodName) {
-        super(project, "mvp code writer");
+        super(project);
         this.project = project;
         this.psiDirectory = psiDirectory;
         this.activityClassName = activityClassName;
@@ -38,7 +26,7 @@ public class MVPCodeWriter extends WriteCommandAction.Simple {
     }
 
     @Override
-    protected void run() throws Throwable {
+    public void run() {
         PsiElementFactory psiElementFactory = JavaPsiFacade.getElementFactory(project);
         StringBuilder classContent = new StringBuilder("package com.linciping.copyres;\n");
         classContent.append("public class Demo{\n");

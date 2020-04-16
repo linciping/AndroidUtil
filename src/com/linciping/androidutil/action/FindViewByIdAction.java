@@ -20,10 +20,7 @@ import com.linciping.androidutil.util.ActionUtil;
 import com.linciping.androidutil.util.Util;
 import com.linciping.androidutil.util.ViewSaxHandler;
 import com.linciping.androidutil.view.FindViewDialog;
-import com.linciping.androidutil.writer.ActivityCodeWriter;
-import com.linciping.androidutil.writer.FragmentCodeWriter;
-import com.linciping.androidutil.writer.ListAdapterViewHolderCodeWriter;
-import com.linciping.androidutil.writer.RecyclerViewHolderCodeWriter;
+import com.linciping.androidutil.writer.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -229,20 +226,24 @@ public class FindViewByIdAction extends BaseGenerateAction {
     private FindViewDialog.OnClickListener onClickListener = new FindViewDialog.OnClickListener() {
         @Override
         public void onOK() {
+            BaseCodeWriter codeWriter;
             switch (viewCodeType) {
                 case Constant.ACTIVITY_CODE_WRITER:
-                    new ActivityCodeWriter(viewPartList, psiClass, psiFile, isAddInitViewMethod, isHasInitViewMethod, isTarget26).execute();
+                    codeWriter = new ActivityCodeWriter(viewPartList, psiClass, psiFile, isAddInitViewMethod, isHasInitViewMethod, isTarget26);
                     break;
                 case Constant.FRAGMENT_CODE_WRITER:
-                    new FragmentCodeWriter(viewPartList, psiClass, psiFile, isTarget26, isAddInitViewMethod, isHasInitViewMethod, rootViewStr).execute();
+                    codeWriter = new FragmentCodeWriter(viewPartList, psiClass, psiFile, isTarget26, isAddInitViewMethod, isHasInitViewMethod, rootViewStr);
                     break;
                 case Constant.LIST_ADAPTER_VIEW_HOLDER_CODE_WRITER:
-                    new ListAdapterViewHolderCodeWriter(viewPartList, psiClass, psiFile, isTarget26, isHasViewHolderClass).execute();
+                    codeWriter = new ListAdapterViewHolderCodeWriter(viewPartList, psiClass, psiFile, isTarget26, isHasViewHolderClass);
                     break;
                 case Constant.RECYCLER_ADAPTER_VIEW_HOLDER_CODE_WRITER:
-                    new RecyclerViewHolderCodeWriter(viewPartList, psiClass, psiFile, isTarget26, isHasViewHolderClass).execute();
+                    codeWriter = new RecyclerViewHolderCodeWriter(viewPartList, psiClass, psiFile, isTarget26, isHasViewHolderClass);
                     break;
+                default:
+                    codeWriter = new ViewCodeWriter(viewPartList, psiClass, psiFile, isTarget26);
             }
+            Util.executeWriteCommand(codeWriter);
         }
 
         @Override

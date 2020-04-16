@@ -5,6 +5,8 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
@@ -33,6 +35,7 @@ import com.linciping.androidutil.bean.AndroidUtilComponent;
 import com.linciping.androidutil.bean.MethodParam;
 import com.linciping.androidutil.bean.ViewPart;
 import com.linciping.androidutil.view.StartActivityMethodDialog;
+import com.linciping.androidutil.writer.BaseWriterRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -519,5 +522,11 @@ public class Util {
             }
         }
         return null;
+    }
+
+    public static void executeWriteCommand(final BaseWriterRunnable writerRunnable) {
+        ApplicationManager.getApplication().runWriteAction(() -> {
+            CommandProcessor.getInstance().executeCommand(writerRunnable.getProject(), writerRunnable, writerRunnable.getClass().getSimpleName(), null);
+        });
     }
 }
