@@ -27,97 +27,38 @@ public class FindViewDialog extends JDialog {
     public FindViewDialog() {
         setContentPane(contentPane);
         setModal(true);
-
         initStatus();
-
-        btnCopyCode.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (onClickListener != null) {
-                    onClickListener.onOK();
-                }
-                onCancel();
+        btnCopyCode.addActionListener(e -> {
+            if (onClickListener != null) {
+                onClickListener.onOK();
+            }
+            onCancel();
+        });
+        chbAddM.addChangeListener(e -> {
+            if (onClickListener != null) {
+                onClickListener.onSwitchAddM(chbAddM.isSelected());
+                PropertiesComponent.getInstance().setValue(PropertiesKey.SAVE_ADD_M_ACTION, chbAddM.isSelected());
             }
         });
-
-        chbAddM.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (onClickListener != null) {
-                    onClickListener.onSwitchAddM(chbAddM.isSelected());
-                    PropertiesComponent.getInstance().setValue(PropertiesKey.SAVE_ADD_M_ACTION, chbAddM.isSelected());
-                }
+        chbIsViewHolder.addChangeListener(e -> onClickListener.onSwitchIsViewHolder(chbIsViewHolder.isSelected()));
+        chbIsTarget26.addChangeListener(e -> {
+            if (onClickListener != null) {
+                onClickListener.onSwitchIsTarget26(chbIsTarget26.isSelected());
+                PropertiesComponent.getInstance().setValue(PropertiesKey.IS_TARGET_26, chbIsTarget26.isSelected());
             }
         });
-
-        chbIsViewHolder.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (onClickListener != null) {
-                    onClickListener.onSwitchIsViewHolder(chbIsViewHolder.isSelected());
-                }
-            }
-        });
-
-        chbIsTarget26.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (onClickListener != null) {
-                    onClickListener.onSwitchIsTarget26(chbIsTarget26.isSelected());
-                    PropertiesComponent.getInstance().setValue(PropertiesKey.IS_TARGET_26, chbIsTarget26.isSelected());
-                }
-            }
-        });
-        btnClose.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FindViewDialog.this.onCancel();
-            }
-        });
-        btnSelectAll.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (onClickListener != null) {
-                    onClickListener.onSelectAll();
-                }
-            }
-        });
-
-        btnSelectNone.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (onClickListener != null) {
-                    onClickListener.onSelectNone();
-                }
-            }
-        });
-
-        btnNegativeSelect.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (onClickListener != null) {
-                    onClickListener.onNegativeSelect();
-                }
-            }
-        });
-
-
+        btnClose.addActionListener(e -> FindViewDialog.this.onCancel());
+        btnSelectAll.addActionListener(e -> onClickListener.onSelectAll());
+        btnSelectNone.addActionListener(e -> onClickListener.onSelectNone());
+        btnNegativeSelect.addActionListener(e -> onClickListener.onNegativeSelect());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }
         });
-
-        contentPane.registerKeyboardAction(new ActionListener() {
-                                               @Override
-                                               public void actionPerformed(ActionEvent e) {
-                                                   FindViewDialog.this.onCancel();
-                                               }
-                                           },
+        contentPane.registerKeyboardAction(e -> FindViewDialog.this.onCancel(),
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-
         contentPane.registerKeyboardAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -171,8 +112,4 @@ public class FindViewDialog extends JDialog {
         tableViews.setModel(model);
         tableViews.getColumnModel().getColumn(0).setPreferredWidth(20);
     }
-
-//    public String getSerch() {
-//        return editSearch.getText().trim();
-//    }
 }

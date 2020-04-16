@@ -1,8 +1,8 @@
 package com.linciping.androidutil.util;
 
+import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
+import com.intellij.psi.*;
 import com.intellij.psi.search.EverythingGlobalScope;
 import com.linciping.androidutil.bean.InstanceMethodBean;
 import com.linciping.androidutil.bean.MethodParam;
@@ -164,5 +164,27 @@ public class CodeUtil {
         extraSettingValueMethodCodeBuilder.append(extraDataStatementBuilder);
         extraSettingValueMethodCodeBuilder.append("}");
         return new InstanceMethodBean(methodBuilder.toString(), extraSettingValueMethodCodeBuilder.toString(), constantList);
+    }
+
+    public static PsiFile createJavaClass(Project project, String className, String packageName, String superClassName) {
+        StringBuilder classContent = new StringBuilder("package ").append(packageName).append(";\n");
+        if (CheckUtil.isStringNoEmpty(superClassName)) {
+            classContent.append("public class ").append(className).append(" extends ").append(superClassName).append("{\n");
+        } else {
+            classContent.append("public class ").append(className).append("{\n");
+        }
+        classContent.append("}");
+        return PsiFileFactory.getInstance(project).createFileFromText("Demo.java", StdFileTypes.JAVA, classContent.toString());
+    }
+
+    public static PsiFile createJavaInterface(Project project, String interfaceName, String packageName, String superClassName) {
+        StringBuilder classContent = new StringBuilder("package ").append(packageName).append(";\n");
+        if (CheckUtil.isStringNoEmpty(superClassName)) {
+            classContent.append("public interface ").append(interfaceName).append(" extends ").append(superClassName).append("{\n");
+        } else {
+            classContent.append("public interface ").append(interfaceName).append("{\n");
+        }
+        classContent.append("}");
+        return PsiFileFactory.getInstance(project).createFileFromText("Demo.java", StdFileTypes.JAVA, classContent.toString());
     }
 }

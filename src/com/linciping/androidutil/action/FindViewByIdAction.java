@@ -140,6 +140,8 @@ public class FindViewByIdAction extends BaseGenerateAction {
         return true;
     }
 
+    private PsiClass recyclerViewHolderClass;
+
     private void buildViewCodeType() {
         Project project = psiFile.getProject();
         PsiClass activityClass = JavaPsiFacade.getInstance(project).findClass("android.app.Activity", new EverythingGlobalScope(project));
@@ -152,8 +154,10 @@ public class FindViewByIdAction extends BaseGenerateAction {
         PsiClass recyclerAdapterClass = null;
         if (recyclerViewClass != null) {
             recyclerAdapterClass = recyclerViewClass.findInnerClassByName("Adapter", true);
+            recyclerViewHolderClass=recyclerViewClass.findInnerClassByName("ViewHolder",true);
         } else if (androidXRecyclerViewClass != null) {
             recyclerAdapterClass = androidXRecyclerViewClass.findInnerClassByName("Adapter", true);
+            recyclerViewHolderClass=androidXRecyclerViewClass.findInnerClassByName("ViewHolder",true);
         }
 
         if (activityClass != null && psiClass.isInheritor(activityClass, true)) {
@@ -238,7 +242,9 @@ public class FindViewByIdAction extends BaseGenerateAction {
                     codeWriter = new ListAdapterViewHolderCodeWriter(viewPartList, psiClass, psiFile, isTarget26, isHasViewHolderClass);
                     break;
                 case Constant.RECYCLER_ADAPTER_VIEW_HOLDER_CODE_WRITER:
-                    codeWriter = new RecyclerViewHolderCodeWriter(viewPartList, psiClass, psiFile, isTarget26, isHasViewHolderClass);
+                    RecyclerViewHolderCodeWriter recyclerViewHolderCodeWriter = new RecyclerViewHolderCodeWriter(viewPartList, psiClass, psiFile, isTarget26, isHasViewHolderClass);
+                    recyclerViewHolderCodeWriter.setRecyclerViewHolderClass(recyclerViewHolderClass);
+                    codeWriter=recyclerViewHolderCodeWriter;
                     break;
                 default:
                     codeWriter = new ViewCodeWriter(viewPartList, psiClass, psiFile, isTarget26);

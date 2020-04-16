@@ -417,6 +417,19 @@ public class Util {
         return null;
     }
 
+    public static PsiClass findRecyclerViewHolderClass(PsiClass recyclerViewHolderClass,PsiClass psiClass) {
+        PsiClass[] psiClasses = psiClass.getInnerClasses();
+        for (PsiClass innerClass : psiClasses) {
+            if (innerClass.isInheritor(recyclerViewHolderClass,true)) {
+                return innerClass;
+            }else {
+                PsiClass psiClass1= findRecyclerViewHolderClass(recyclerViewHolderClass,innerClass);
+                if (psiClass1!=null) return psiClass1;
+            }
+        }
+        return null;
+    }
+
     public static boolean hasViewHolderClass(PsiClass psiClass) {
         PsiClass[] psiClasses = psiClass.getInnerClasses();
         for (PsiClass innerClass : psiClasses) {
@@ -528,5 +541,9 @@ public class Util {
         ApplicationManager.getApplication().runWriteAction(() -> {
             CommandProcessor.getInstance().executeCommand(writerRunnable.getProject(), writerRunnable, writerRunnable.getClass().getSimpleName(), null);
         });
+    }
+
+    public static PsiClass findClassForName(Project project, String className) {
+        return JavaPsiFacade.getInstance(project).findClass(className, new EverythingGlobalScope(project));
     }
 }

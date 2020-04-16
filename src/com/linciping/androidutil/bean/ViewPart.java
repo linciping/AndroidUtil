@@ -64,10 +64,9 @@ public class ViewPart {
     public void setType(String type) {
         String[] packages = type.split("\\.");
         if (packages.length > 1) {
-            this.typeFull = type;
             this.type = packages[packages.length - 1];
         } else {
-            this.typeFull = null;
+            this.typeFull = "android.widget."+type;
             this.type = type;
         }
     }

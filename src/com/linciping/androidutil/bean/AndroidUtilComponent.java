@@ -19,6 +19,7 @@ public class AndroidUtilComponent implements ProjectComponent, Serializable, Per
     private String constantClassPath = "";
     private String basePresenterClassPath="";
     private String baseViewClassPath="";
+    private String baseActivityClassPath="";
     private boolean presenterGeneric;
 
     public String getBasePresenterClassPath() {
@@ -27,6 +28,14 @@ public class AndroidUtilComponent implements ProjectComponent, Serializable, Per
 
     public void setBasePresenterClassPath(String basePresenterClassPath) {
         this.basePresenterClassPath = basePresenterClassPath;
+    }
+
+    public String getBaseActivityClassPath() {
+        return baseActivityClassPath;
+    }
+
+    public void setBaseActivityClassPath(String baseActivityClassPath) {
+        this.baseActivityClassPath = baseActivityClassPath;
     }
 
     public String getBaseViewClassPath() {

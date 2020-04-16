@@ -80,6 +80,13 @@ public class AndroidUtilSettingView implements Configurable {
                 androidUtilComponent.setBaseViewClassPath(virtualFile.getPath());
             }
         });
+        androidUtiSettingForm.addChooseBaseActivityAction(e -> {
+            if (virtualFile != null) {
+                isModified = true;
+                androidUtiSettingForm.setBaseActivityClassPath(virtualFile.getPath());
+                androidUtilComponent.setBaseActivityClassPath(virtualFile.getPath());
+            }
+        });
         return androidUtiSettingForm.getPlRoot();
     }
 
@@ -101,6 +108,9 @@ public class AndroidUtilSettingView implements Configurable {
         }
         if (CheckUtil.isStringNoEmpty(androidUtiSettingForm.getBaseViewClassPath())){
             androidUtilComponent.setBaseViewClassPath(androidUtiSettingForm.getBaseViewClassPath());
+        }
+        if (CheckUtil.isStringNoEmpty(androidUtiSettingForm.getBaseActivityClassPath())){
+            androidUtilComponent.setBaseActivityClassPath(androidUtiSettingForm.getBaseViewClassPath());
         }
         androidUtilComponent.setReflect(androidUtiSettingForm.isReflect());
         isModified = false;

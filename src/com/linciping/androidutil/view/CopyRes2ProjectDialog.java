@@ -300,6 +300,7 @@ public class CopyRes2ProjectDialog extends JDialog {
             int col = e.getColumn();
             if (col == 0) {
                 String value = tableModel.getValueAt(row, col).toString();
+                System.out.println("row="+row+",value="+value);
                 resIdMap.put(row, value);
             }
         });

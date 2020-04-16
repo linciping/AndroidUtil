@@ -21,6 +21,8 @@ public class AndroidUtiSettingForm {
     private JButton btnChoosePresenterBase;
     private JButton btnChooseViewBase;
     private JCheckBox cbPresenterGeneric;
+    private JButton btnChooseActivityBase;
+    private JTextField tvActivityBase;
 
     public AndroidUtiSettingForm(AndroidUtilComponent androidUtilComponent) {
         if (CheckUtil.isStringNoEmpty(androidUtilComponent.getResDirPath())) {
@@ -34,6 +36,9 @@ public class AndroidUtiSettingForm {
         }
         if (CheckUtil.isStringNoEmpty(androidUtilComponent.getBaseViewClassPath())){
             tvViewBase.setText(androidUtilComponent.getBaseViewClassPath());
+        }
+        if (CheckUtil.isStringNoEmpty(androidUtilComponent.getBaseActivityClassPath())){
+            tvActivityBase.setText(androidUtilComponent.getBaseActivityClassPath());
         }
         cbIsReflect.setSelected(androidUtilComponent.isReflect());
         cbPresenterGeneric.setSelected(androidUtilComponent.isPresenterGeneric());
@@ -61,6 +66,10 @@ public class AndroidUtiSettingForm {
 
     public void addChooseBaseViewAction(ActionListener actionListener){
         btnChooseViewBase.addActionListener(actionListener);
+    }
+
+    public void addChooseBaseActivityAction(ActionListener actionListener){
+        btnChooseActivityBase.addActionListener(actionListener);
     }
 
     public JPanel getPlRoot() {
@@ -121,5 +130,17 @@ public class AndroidUtiSettingForm {
 
     public void setBaseViewClassPath(String baseViewClassPath){
         tvViewBase.setText(baseViewClassPath);
+    }
+
+    @Nullable
+    public String getBaseActivityClassPath(){
+        if (CheckUtil.isStringNoEmpty(tvActivityBase.getText())){
+            return tvActivityBase.getText();
+        }
+        return null;
+    }
+
+    public void setBaseActivityClassPath(String baseActivityClassPath){
+        tvActivityBase.setText(baseActivityClassPath);
     }
 }
