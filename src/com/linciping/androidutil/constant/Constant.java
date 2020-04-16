@@ -1,4 +1,4 @@
-package com.linciping.androidutil.bean;
+package com.linciping.androidutil.constant;
 
 public interface Constant {
 

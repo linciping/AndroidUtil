@@ -1,7 +1,6 @@
 package com.linciping.androidutil.bean;
 
 import com.linciping.androidutil.util.CheckUtil;
-import com.linciping.androidutil.util.Definitions;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,13 +12,10 @@ import java.util.regex.Pattern;
 public class ViewPart {
 
     private static final String OUTPUT_DECLARE_STRING = "private %s %s;\n";
-    private static final String OUTPUT_DECLARE_KT_STRING = "private lateinit var %s:%s;\n";
     private static final String OUTPUT_DECLARE_STRING_NOT_PRIVATE = "%s %s;\n";
 
     private static final String OUTPUT_FIND_VIEW_STRING = "%s = (%s) findViewById(R.id.%s);\n";
     private static final String OUTPUT_FIND_VIEW_STRING_TARGET26 = "%s = findViewById(R.id.%s);\n";
-
-    private static final String OUTPUT_FIND_VIEW_STRING_KOTLIN = "private val %s: %s by lazy { findViewById<%s>(R.id.%s) }\n";
 
     private static final String OUTPUT_FIND_VIEW_STRING_WITH_ROOT_VIEW = "%s = (%s) %s.findViewById(R.id.%s);\n";
     private static final String OUTPUT_FIND_VIEW_STRING_WITH_ROOT_VIEW_TARGET26 = "%s = %s.findViewById(R.id.%s);\n";
@@ -125,29 +121,11 @@ public class ViewPart {
             String realType;
             if (!CheckUtil.isStringEmpty(getTypeFull())) {
                 realType = getTypeFull();
-            } else if (Definitions.paths.containsKey(getType())) {
-                realType = Definitions.paths.get(getType());
             } else {
                 realType = "android.widget." + getType();
             }
             return String.format(OUTPUT_DECLARE_STRING, realType, name);
         }
-    }
-
-    public String getDeclareStringKt(boolean isShow) {
-        if (isShow) {
-            return String.format(OUTPUT_DECLARE_STRING, type, name);
-        }
-
-        String realType;
-        if (!CheckUtil.isStringEmpty(getTypeFull())) {
-            realType = getTypeFull();
-        } else if (Definitions.paths.containsKey(getType())) {
-            realType = Definitions.paths.get(getType());
-        } else {
-            realType = "android.widget." + getType();
-        }
-        return String.format(OUTPUT_DECLARE_STRING, realType, name);
     }
 
     public String getFindViewStringWithRootView(String rootView, boolean isTarget26) {
@@ -162,17 +140,6 @@ public class ViewPart {
             return String.format(OUTPUT_FIND_VIEW_STRING_TARGET26, name, id);
 
         return String.format(OUTPUT_FIND_VIEW_STRING, name, type, id);
-    }
-
-    public String getFindViewStringKt(boolean isExtensions) {
-        String lName = "";
-        if (isExtensions) {
-            lName = scrNameFromId;
-        } else {
-            lName = name;
-        }
-
-        return String.format(OUTPUT_FIND_VIEW_STRING_KOTLIN, lName, type, type, id);
     }
 
     public void resetName() {

@@ -25,6 +25,7 @@ public abstract class FindViewCodeWriter extends BaseCodeWriter {
     @Override
     protected void buildCode(PsiClass psiClass, PsiElementFactory psiElementFactory) {
         buildCode(psiClass, viewPartList, psiElementFactory);
+        formatCode();
     }
 
     protected abstract void buildCode(PsiClass psiClass, List<ViewPart> viewPartList, PsiElementFactory psiElementFactory);

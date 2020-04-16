@@ -72,30 +72,6 @@ public class ActionUtil {
         return stringBuilder.toString();
     }
 
-    public static String generateKtCode(List<ViewPart> viewParts, boolean isViewHolder, boolean isTarget26, boolean isAddRootView, String rootView) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (ViewPart viewPart : viewParts) {
-            if (viewPart.isSelected()) {
-                if (!isViewHolder) {
-                    stringBuilder.append(viewPart.getDeclareStringKt(true));
-                }
-            }
-        }
-        stringBuilder.append("\n");
-        for (ViewPart viewPart : viewParts) {
-            if (viewPart.isSelected()) {
-                if (isViewHolder) {
-                    stringBuilder.append(viewPart.getFindViewStringForViewHolder("convertView", isTarget26));
-                } else if (isAddRootView && !TextUtils.isEmpty(rootView)) {
-                    stringBuilder.append(viewPart.getFindViewStringWithRootView(rootView, isTarget26));
-                } else {
-                    stringBuilder.append(viewPart.getFindViewString(isTarget26));
-                }
-            }
-        }
-        return stringBuilder.toString();
-    }
-
     public static DefaultTableModel getTableModel(List<ViewPart> viewParts, TableModelListener tableModelListener) {
         DefaultTableModel tableModel;
         int size = viewParts.size();

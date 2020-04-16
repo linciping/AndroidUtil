@@ -13,9 +13,9 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.psi.*;
 import com.intellij.psi.search.EverythingGlobalScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.linciping.androidutil.bean.Constant;
 import com.linciping.androidutil.bean.PropertiesKey;
 import com.linciping.androidutil.bean.ViewPart;
+import com.linciping.androidutil.constant.Constant;
 import com.linciping.androidutil.util.ActionUtil;
 import com.linciping.androidutil.util.Util;
 import com.linciping.androidutil.util.ViewSaxHandler;
@@ -145,20 +145,13 @@ public class FindViewByIdAction extends BaseGenerateAction {
 
     private void buildViewCodeType() {
         Project project = psiFile.getProject();
-        PsiClass activityClass = JavaPsiFacade.getInstance(project).findClass(
-                "android.app.Activity", new EverythingGlobalScope(project));
-        PsiClass fragmentClass = JavaPsiFacade.getInstance(project).findClass(
-                "android.app.Fragment", new EverythingGlobalScope(project));
-        PsiClass supportFragmentClass = JavaPsiFacade.getInstance(project).findClass(
-                "android.support.v4.app.Fragment", new EverythingGlobalScope(project));
-        PsiClass androidXFragmentClass = JavaPsiFacade.getInstance(project).findClass(
-                "androidx.fragment.app.Fragment", new EverythingGlobalScope(project));
-        PsiClass listAdapterClass = JavaPsiFacade.getInstance(project).findClass(
-                "android.widget.BaseAdapter", new EverythingGlobalScope(project));
-        PsiClass recyclerViewClass = JavaPsiFacade.getInstance(project).findClass(
-                "android.support.v7.widget.RecyclerView", new EverythingGlobalScope(project));
-        PsiClass androidXRecyclerViewClass = JavaPsiFacade.getInstance(project).findClass(
-                "androidx.recyclerview.widget.RecyclerView", new EverythingGlobalScope(project));
+        PsiClass activityClass = JavaPsiFacade.getInstance(project).findClass("android.app.Activity", new EverythingGlobalScope(project));
+        PsiClass fragmentClass = JavaPsiFacade.getInstance(project).findClass("android.app.Fragment", new EverythingGlobalScope(project));
+        PsiClass supportFragmentClass = JavaPsiFacade.getInstance(project).findClass("android.support.v4.app.Fragment", new EverythingGlobalScope(project));
+        PsiClass androidXFragmentClass = JavaPsiFacade.getInstance(project).findClass("androidx.fragment.app.Fragment", new EverythingGlobalScope(project));
+        PsiClass listAdapterClass = JavaPsiFacade.getInstance(project).findClass("android.widget.BaseAdapter", new EverythingGlobalScope(project));
+        PsiClass recyclerViewClass = JavaPsiFacade.getInstance(project).findClass("android.support.v7.widget.RecyclerView", new EverythingGlobalScope(project));
+        PsiClass androidXRecyclerViewClass = JavaPsiFacade.getInstance(project).findClass("androidx.recyclerview.widget.RecyclerView", new EverythingGlobalScope(project));
         PsiClass recyclerAdapterClass = null;
         if (recyclerViewClass != null) {
             recyclerAdapterClass = recyclerViewClass.findInnerClassByName("Adapter", true);

@@ -5,7 +5,6 @@ import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.search.EverythingGlobalScope;
 
 public abstract class BaseCodeWriter extends WriteCommandAction.Simple {
 

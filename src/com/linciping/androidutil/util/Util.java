@@ -29,6 +29,7 @@ import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.util.Consumer;
+import com.linciping.androidutil.bean.AndroidUtilComponent;
 import com.linciping.androidutil.bean.MethodParam;
 import com.linciping.androidutil.bean.ViewPart;
 import com.linciping.androidutil.view.StartActivityMethodDialog;
@@ -69,7 +70,7 @@ public class Util {
                         cellData[i][j] = methodParam.isSelected();
                         break;
                     case 1:
-                        cellData[i][j] = methodParam.getParamType();
+                        cellData[i][j] = methodParam.getParamTypeName();
                         break;
                     case 2:
                         cellData[i][j] = methodParam.getParamName();
@@ -102,15 +103,25 @@ public class Util {
         return activityName.replace(first, realFirst);
     }
 
-    public static List<MethodParam> getMetParamList(PsiClass psiClass) {
+    public static List<MethodParam> getMethodParamList(PsiClass psiClass) {
         PsiField[] psiFields = psiClass.getFields();
         List<MethodParam> methodParamList = new ArrayList<>(psiFields.length);
         for (PsiField psiField : psiFields) {
-            MethodParam methodParam = new MethodParam(psiField.getType().getPresentableText(), psiField.getName());
+            MethodParam methodParam = new MethodParam(psiField.getType(), psiField.getName());
             methodParamList.add(methodParam);
         }
         return methodParamList;
     }
+
+    public static String getConstantClassName(Project project) {
+        AndroidUtilComponent androidUtilComponent = AndroidUtilComponent.getInstance(project);
+        if (CheckUtil.isStringNoEmpty(androidUtilComponent.getConstantClassPath())) {
+            return Util.getFileNameByPath(androidUtilComponent.getConstantClassPath());
+        } else {
+            return "IntentKey";
+        }
+    }
+
 
     public static void showErrorNotification(String message, Project project) {
         NotificationGroup notificationGroup = new NotificationGroup("File Diff", NotificationDisplayType.TOOL_WINDOW, true);
@@ -495,5 +506,18 @@ public class Util {
         String fileName = path.substring(index + 1);
         System.out.println("constant class name=" + fileName);
         return fileName.split("\\.")[0];
+    }
+
+    public static PsiMethod findClassMethod(PsiClass psiClass, String methodName) {
+        PsiMethod[] psiMethods = psiClass.getMethods();
+        if (psiMethods.length > 0) {
+            for (PsiMethod psiMethod : psiMethods) {
+                int paramsCount = psiMethod.getParameterList().getParametersCount();
+                if (psiMethod.getName().equals(methodName) && paramsCount == 1) {
+                    return psiMethod;
+                }
+            }
+        }
+        return null;
     }
 }

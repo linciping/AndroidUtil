@@ -6,12 +6,14 @@ import java.io.Serializable;
 
 public class MethodParam implements Serializable {
 
-    private boolean isSelected=true;
-    private String paramType;
+    private boolean isSelected = true;
+    private PsiType paramType;
+    private String paramTypeName;
     private String paramName;
 
-    public MethodParam(String paramType, String paramName) {
+    public MethodParam(PsiType paramType, String paramName) {
         this.paramType = paramType;
+        this.paramTypeName = paramType.getPresentableText();
         if (paramName.startsWith("m")) {
             paramName = paramName.replace("m", "");
             String first = paramName.substring(0, 1);
@@ -19,6 +21,10 @@ public class MethodParam implements Serializable {
             paramName = paramName.replace(first, realFirst);
         }
         this.paramName = paramName;
+    }
+
+    public PsiType getParamType() {
+        return paramType;
     }
 
     public boolean isSelected() {
@@ -29,12 +35,12 @@ public class MethodParam implements Serializable {
         isSelected = selected;
     }
 
-    public String getParamType() {
-        return paramType;
+    public String getParamTypeName() {
+        return paramTypeName;
     }
 
-    public void setParamType(String paramType) {
-        this.paramType = paramType;
+    public void setParamTypeName(String paramTypeName) {
+        this.paramTypeName = paramTypeName;
     }
 
     public String getParamName() {

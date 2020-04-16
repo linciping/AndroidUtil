@@ -2,20 +2,23 @@ package com.linciping.androidutil.action;
 
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.generation.actions.BaseGenerateAction;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.search.EverythingGlobalScope;
+import com.linciping.androidutil.bean.InstanceMethodBean;
 import com.linciping.androidutil.bean.MethodParam;
 import com.linciping.androidutil.util.CodeUtil;
 import com.linciping.androidutil.util.Util;
 import com.linciping.androidutil.view.StartActivityMethodDialog;
-import com.linciping.androidutil.writer.StartActivityMethodWriter;
+import com.linciping.androidutil.writer.FragmentNewInstanceWriter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.TableModelEvent;
@@ -30,6 +33,9 @@ public class FragmentNewInstanceAction extends BaseGenerateAction {
     private List<MethodParam> methodParamList;
     private DefaultTableModel tableModel;
     private StartActivityMethodDialog startActivityMethodDialog;
+    private String constantClassName;
+    private Project project;
+    private InstanceMethodBean instanceMethodBean;
 
     public FragmentNewInstanceAction() {
         super(null);
@@ -42,19 +48,25 @@ public class FragmentNewInstanceAction extends BaseGenerateAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         psiJavaFile = (PsiJavaFile) e.getData(LangDataKeys.PSI_FILE);
+        project = e.getProject();
+        assert project != null;
         Editor editor = e.getData(PlatformDataKeys.EDITOR);
         assert editor != null;
         psiClass = getTargetClass(editor, psiJavaFile);
-        assert psiClass!=null;
-        Util.getMetParamList(psiClass);
+        assert psiClass != null;
+        methodParamList = Util.getMethodParamList(psiClass);
+        constantClassName = Util.getConstantClassName(e.getProject());
         startActivityMethodDialog = new StartActivityMethodDialog();
-        tableModel= Util.updateTable(methodParamList,startActivityMethodDialog, tableModelListener);
+        tableModel = Util.updateTable(methodParamList, startActivityMethodDialog, tableModelListener);
         startActivityMethodDialog.setTitle("StartActivityMethod");
         startActivityMethodDialog.pack();
-        startActivityMethodDialog.setCode(CodeUtil.createFragmentInstanceMethod(methodParamList, psiClass.getName()));
+        instanceMethodBean = CodeUtil.createFragmentInstanceMethod(methodParamList, psiClass.getName(),
+                constantClassName, project);
+        String code = instanceMethodBean.getInstanceMethodCode() + "\n\n" + instanceMethodBean.getExtraSettingValueMethodCode();
+        startActivityMethodDialog.setCode(code);
         startActivityMethodDialog.setOkActionListener(e1 -> {
-//            new StartActivityMethodWriter(psiClass,psiJavaFile,startActivityMethodDialog.getCode()).execute();
-//            startActivityMethodDialog.dispose();
+            new FragmentNewInstanceWriter(psiClass, psiJavaFile, instanceMethodBean).execute();
+            startActivityMethodDialog.dispose();
         });
         startActivityMethodDialog.setLocationRelativeTo(WindowManager.getInstance().getFrame(e.getProject()));
         startActivityMethodDialog.setVisible(true);
@@ -71,7 +83,9 @@ public class FragmentNewInstanceAction extends BaseGenerateAction {
             if (column == 0) {
                 Boolean isSelected = (Boolean) tableModel.getValueAt(row, column);
                 methodParamList.get(row).setSelected(isSelected);
-                startActivityMethodDialog.setCode(CodeUtil.createFragmentInstanceMethod(methodParamList,psiClass.getName()));
+                instanceMethodBean = CodeUtil.createFragmentInstanceMethod(methodParamList, psiClass.getName(), constantClassName, project);
+                String code = instanceMethodBean.getInstanceMethodCode() + "\n\n" + instanceMethodBean.getExtraSettingValueMethodCode();
+                startActivityMethodDialog.setCode(code);
             }
         }
     };
