@@ -17,6 +17,25 @@ public class AndroidUtilComponent implements ProjectComponent, Serializable, Per
     private String resDirPath = "";
     private boolean isReflect = true;
     private String constantClassPath = "";
+    private String basePresenterClassPath="";
+    private String baseViewClassPath="";
+    private boolean presenterGeneric;
+
+    public String getBasePresenterClassPath() {
+        return basePresenterClassPath;
+    }
+
+    public void setBasePresenterClassPath(String basePresenterClassPath) {
+        this.basePresenterClassPath = basePresenterClassPath;
+    }
+
+    public String getBaseViewClassPath() {
+        return baseViewClassPath;
+    }
+
+    public void setBaseViewClassPath(String baseViewClassPath) {
+        this.baseViewClassPath = baseViewClassPath;
+    }
 
     public String getConstantClassPath() {
         return constantClassPath;
@@ -42,9 +61,16 @@ public class AndroidUtilComponent implements ProjectComponent, Serializable, Per
         this.resDirPath = resDirPath;
     }
 
-
     public static AndroidUtilComponent getInstance(Project project) {
         return project.getComponent(AndroidUtilComponent.class);
+    }
+
+    public boolean isPresenterGeneric() {
+        return presenterGeneric;
+    }
+
+    public void setPresenterGeneric(boolean presenterGeneric) {
+        this.presenterGeneric = presenterGeneric;
     }
 
     @Nullable

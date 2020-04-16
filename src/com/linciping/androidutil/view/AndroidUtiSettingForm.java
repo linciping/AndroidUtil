@@ -16,6 +16,11 @@ public class AndroidUtiSettingForm {
     private JCheckBox cbIsReflect;
     private JTextField tvConstantClass;
     private JButton btnChooseConstantClass;
+    private JTextField tvPresenterBase;
+    private JTextField tvViewBase;
+    private JButton btnChoosePresenterBase;
+    private JButton btnChooseViewBase;
+    private JCheckBox cbPresenterGeneric;
 
     public AndroidUtiSettingForm(AndroidUtilComponent androidUtilComponent) {
         if (CheckUtil.isStringNoEmpty(androidUtilComponent.getResDirPath())) {
@@ -24,7 +29,14 @@ public class AndroidUtiSettingForm {
         if (CheckUtil.isStringNoEmpty(androidUtilComponent.getConstantClassPath())) {
             tvConstantClass.setText(androidUtilComponent.getConstantClassPath());
         }
+        if (CheckUtil.isStringNoEmpty(androidUtilComponent.getBasePresenterClassPath())){
+            tvPresenterBase.setText(androidUtilComponent.getBasePresenterClassPath());
+        }
+        if (CheckUtil.isStringNoEmpty(androidUtilComponent.getBaseViewClassPath())){
+            tvViewBase.setText(androidUtilComponent.getBaseViewClassPath());
+        }
         cbIsReflect.setSelected(androidUtilComponent.isReflect());
+        cbPresenterGeneric.setSelected(androidUtilComponent.isPresenterGeneric());
     }
 
     public void addChooseResDirAction(ActionListener actionListener) {
@@ -35,8 +47,20 @@ public class AndroidUtiSettingForm {
         cbIsReflect.addChangeListener(changeListener);
     }
 
+    public void addPresenterGenericChangeListener(ChangeListener changeListener) {
+        cbPresenterGeneric.addChangeListener(changeListener);
+    }
+
     public void addChooseConstantAction(ActionListener actionListener) {
         btnChooseConstantClass.addActionListener(actionListener);
+    }
+
+    public void addChooseBasePresenterAction(ActionListener actionListener){
+        btnChoosePresenterBase.addActionListener(actionListener);
+    }
+
+    public void addChooseBaseViewAction(ActionListener actionListener){
+        btnChooseViewBase.addActionListener(actionListener);
     }
 
     public JPanel getPlRoot() {
@@ -59,6 +83,10 @@ public class AndroidUtiSettingForm {
         return cbIsReflect.isSelected();
     }
 
+    public boolean isPresenterGeneric(){
+        return cbPresenterGeneric.isSelected();
+    }
+
     @Nullable
     public String getConstantClassPath() {
         if (tvConstantClass.getText() != null && !tvConstantClass.getText().isEmpty()) {
@@ -69,5 +97,29 @@ public class AndroidUtiSettingForm {
 
     public void setConstantClassPath(String path) {
         tvConstantClass.setText(path);
+    }
+
+    @Nullable
+    public String getBasePresenterClassPath(){
+        if (CheckUtil.isStringNoEmpty(tvPresenterBase.getText())){
+            return tvPresenterBase.getText();
+        }
+        return null;
+    }
+
+    public void setBasePresenterClassPath(String basePresenterClassPath){
+        tvPresenterBase.setText(basePresenterClassPath);
+    }
+
+    @Nullable
+    public String getBaseViewClassPath(){
+        if (CheckUtil.isStringNoEmpty(tvViewBase.getText())){
+            return tvViewBase.getText();
+        }
+        return null;
+    }
+
+    public void setBaseViewClassPath(String baseViewClassPath){
+        tvViewBase.setText(baseViewClassPath);
     }
 }

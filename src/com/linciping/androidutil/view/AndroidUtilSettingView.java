@@ -51,6 +51,11 @@ public class AndroidUtilSettingView implements Configurable {
             JCheckBox checkBox = (JCheckBox) e.getSource();
             androidUtilComponent.setReflect(checkBox.isSelected());
         });
+        androidUtiSettingForm.addPresenterGenericChangeListener(e -> {
+            isModified=true;
+            JCheckBox checkBox = (JCheckBox) e.getSource();
+            androidUtilComponent.setPresenterGeneric(checkBox.isSelected());
+        });
         androidUtiSettingForm.addChooseConstantAction(e -> {
             Util.showSelectSingleClass(project, "请选择常量类", virtualFile -> {
                 if (virtualFile != null) {
@@ -59,6 +64,21 @@ public class AndroidUtilSettingView implements Configurable {
                     androidUtilComponent.setConstantClassPath(virtualFile.getPath());
                 }
             });
+        });
+        androidUtiSettingForm.addChooseBasePresenterAction(e -> {
+            if (virtualFile != null) {
+                isModified = true;
+                androidUtiSettingForm.setBasePresenterClassPath(virtualFile.getPath());
+                androidUtilComponent.setBasePresenterClassPath(virtualFile.getPath());
+            }
+        });
+
+        androidUtiSettingForm.addChooseBaseViewAction(e -> {
+            if (virtualFile != null) {
+                isModified = true;
+                androidUtiSettingForm.setBaseViewClassPath(virtualFile.getPath());
+                androidUtilComponent.setBaseViewClassPath(virtualFile.getPath());
+            }
         });
         return androidUtiSettingForm.getPlRoot();
     }
@@ -75,6 +95,12 @@ public class AndroidUtilSettingView implements Configurable {
         }
         if (CheckUtil.isStringNoEmpty(androidUtiSettingForm.getConstantClassPath())) {
             androidUtilComponent.setConstantClassPath(androidUtiSettingForm.getConstantClassPath());
+        }
+        if (CheckUtil.isStringNoEmpty(androidUtiSettingForm.getBasePresenterClassPath())){
+            androidUtilComponent.setBasePresenterClassPath(androidUtiSettingForm.getBasePresenterClassPath());
+        }
+        if (CheckUtil.isStringNoEmpty(androidUtiSettingForm.getBaseViewClassPath())){
+            androidUtilComponent.setBaseViewClassPath(androidUtiSettingForm.getBaseViewClassPath());
         }
         androidUtilComponent.setReflect(androidUtiSettingForm.isReflect());
         isModified = false;
